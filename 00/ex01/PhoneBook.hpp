@@ -6,7 +6,7 @@
 /*   By: yaharkat <yaharkat@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:30:03 by yaharkat          #+#    #+#             */
-/*   Updated: 2024/06/10 23:24:54 by yaharkat         ###   ########.fr       */
+/*   Updated: 2024/07/02 08:55:59 by yaharkat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void PhoneBook::addContact(void)
 		this->contactIndex = 0;
 		contacts[contactIndex] = contact;
 	}
-	printf("Contact added successfully!\n");
+	std::cout << "Contact added successfully!" << std::endl;
 }
 
 std::string formatOutput(std::string str)
@@ -128,13 +128,24 @@ void PhoneBook::searchContact(void)
 
 	this->displayContacts();
 	std::cout << "Enter the index of the Contact you're searching for: ";
+	if (std::cin.fail())
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "Input failed. Exiting search." << std::endl;
+		return ;
+	}
 	std::cin >> index;
-	if (index > 7)
+	if (index > this->contactIndex)
 	{
 		std::cout << "Index out of Range!!" << std::endl;
+		if (std::cin)
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		return ;
 	}
 	else
 		this->displayOneContact(index);
+	if (std::cin)
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 #endif

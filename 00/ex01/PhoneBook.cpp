@@ -6,7 +6,7 @@
 /*   By: yaharkat <yaharkat@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:12:20 by yaharkat          #+#    #+#             */
-/*   Updated: 2024/06/11 21:43:51 by yaharkat         ###   ########.fr       */
+/*   Updated: 2024/07/02 09:23:14 by yaharkat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,14 @@ int	main(void)
 	while (true)
 	{
 		std::cout << "Please enter a command: ";
-		std::getline(std::cin, command);
+		if (!std::getline(std::cin, command))
+		{
+			if (std::cin.eof())
+				std::cout << std::endl << "EOF encountered, exiting..." << std::endl;
+			else
+				std::cout << std::endl << "Input error, exiting..." << std::endl;
+			break ;
+		}
 		if (command == "ADD")
 			phoneBook.addContact();
 		else if (command == "SEARCH")
