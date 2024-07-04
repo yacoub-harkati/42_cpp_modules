@@ -1,14 +1,20 @@
 CC= c++
 CFLAGS= -Wall -Wextra -Werror -std=c++98
-NAME= phonebook
-SRC= PhoneBook.cpp
-HEADER= PhoneBook.hpp
+NAME= account
+SRC= Account.cpp tests.cpp
+HEADER= Account.hpp
 OBJ= $(SRC:.cpp=.o)
+
+ifeq ($(DEBUG), 1)
+	DEBUG= -g3 -fsanitize=address
+else
+	DEBUG=
+endif
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -I PhoneBook.hpp -o $(NAME)
+	$(CC) $(CFLAGS) $(DEBUG) $(OBJ) -I$(HEADER) -o $(NAME)
 
 clean:
 	rm -f $(OBJ)
