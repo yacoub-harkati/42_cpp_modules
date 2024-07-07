@@ -6,7 +6,7 @@
 /*   By: yaharkat <yaharkat@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:54:38 by yaharkat          #+#    #+#             */
-/*   Updated: 2024/07/04 17:01:24 by yaharkat         ###   ########.fr       */
+/*   Updated: 2024/07/07 12:22:44 by yaharkat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,7 @@ class Contact
 	std::string getDarkestSecret();
 	Contact(void);
 };
+
+std::string removeWhiteSpaces(std::string str);
 
 #endif

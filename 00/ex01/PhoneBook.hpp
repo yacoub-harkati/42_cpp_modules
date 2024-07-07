@@ -6,7 +6,7 @@
 /*   By: yaharkat <yaharkat@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:30:03 by yaharkat          #+#    #+#             */
-/*   Updated: 2024/07/04 17:01:48 by yaharkat         ###   ########.fr       */
+/*   Updated: 2024/07/07 12:09:41 by yaharkat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class PhoneBook
 	PhoneBook(Contact contacts[8], int contactIndex);
 	void addContact(void);
 	void searchContact(void);
+	int length(void);
 };
 
 #endif

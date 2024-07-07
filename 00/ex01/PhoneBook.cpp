@@ -6,7 +6,7 @@
 /*   By: yaharkat <yaharkat@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:12:20 by yaharkat          #+#    #+#             */
-/*   Updated: 2024/07/04 16:59:46 by yaharkat         ###   ########.fr       */
+/*   Updated: 2024/07/07 12:23:19 by yaharkat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ std::string formatOutput(std::string str)
 
 PhoneBook::PhoneBook(void)
 {
-	this->contactIndex = 0;
+	contactIndex = 0;
 }
 
 PhoneBook::PhoneBook(Contact contacts[8], int contactIndex)
@@ -71,6 +71,11 @@ void PhoneBook::addContact(void)
 	if (std::cin.eof())
 		return ;
 	Contact contact(firstName, lastName, nickName, phoneNumber, darkestSecret);
+	if (contact.isEmpty())
+	{
+		std::cout << "Contact is empty, not adding!" << std::endl;
+		return ;
+	}
 	if (contactIndex < 8)
 	{
 		contacts[contactIndex] = contact;
@@ -78,7 +83,7 @@ void PhoneBook::addContact(void)
 	}
 	else
 	{
-		this->contactIndex = 0;
+		contactIndex = 0;
 		contacts[contactIndex] = contact;
 	}
 	std::cout << "Contact added successfully!" << std::endl;
@@ -87,30 +92,37 @@ void PhoneBook::addContact(void)
 void PhoneBook::displayContacts(void)
 {
 	std::cout << "     index|first name| last name|  nickname" << std::endl;
-	for (int i = 0; i < 8 && !this->contacts[i].isEmpty(); i++)
+	for (int i = 0; i < 8; i++)
 	{
 		std::cout << "         " << i << "|";
-		std::cout << formatOutput(this->contacts[i].getFirstName()) << "|";
-		std::cout << formatOutput(this->contacts[i].getLastName()) << "|";
-		std::cout << formatOutput(this->contacts[i].getNickName()) << std::endl;
+		std::cout << formatOutput(contacts[i].getFirstName()) << "|";
+		std::cout << formatOutput(contacts[i].getLastName()) << "|";
+		std::cout << formatOutput(contacts[i].getNickName()) << std::endl;
 	}
 }
 
 void PhoneBook::displayOneContact(int i)
 {
-	std::cout << "First Name: " << this->contacts[i].getFirstName() << std::endl;
-	std::cout << "Last Name: " << this->contacts[i].getLastName() << std::endl;
-	std::cout << "Nick Name: " << this->contacts[i].getNickName() << std::endl;
-	std::cout << "Phone Number: " << this->contacts[i].getPhoneNumber() << std::endl;
-	std::cout << "Darkest Secret: " << this->contacts[i].getDarkestSecret() << std::endl;
+	std::cout << "First Name: " << contacts[i].getFirstName() << std::endl;
+	std::cout << "Last Name: " << contacts[i].getLastName() << std::endl;
+	std::cout << "Nick Name: " << contacts[i].getNickName() << std::endl;
+	std::cout << "Phone Number: " << contacts[i].getPhoneNumber() << std::endl;
+	std::cout << "Darkest Secret: " << contacts[i].getDarkestSecret() << std::endl;
 }
+
+int PhoneBook::length(void)
+{
+	return (contactIndex);
+}
+
 
 void PhoneBook::searchContact(void)
 {
 	int	index;
 
-	this->displayContacts();
+	displayContacts();
 	std::cout << "Enter the index of the Contact you're searching for: ";
+	std::cin >> index;
 	if (std::cin.fail())
 	{
 		std::cin.clear();
@@ -118,16 +130,22 @@ void PhoneBook::searchContact(void)
 		std::cout << "Input failed. Exiting search." << std::endl;
 		return ;
 	}
-	std::cin >> index;
-	if (index > this->contactIndex)
+	if (index > 7 || index < 0)
 	{
 		std::cout << "Index out of Range!!" << std::endl;
 		if (std::cin)
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		return ;
 	}
+	 if (this->length() == 0 || index >= this->length())
+	{
+		if (std::cin)
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "No contacts available!" << std::endl;
+		return ;
+	}
 	else
-		this->displayOneContact(index);
+		displayOneContact(index);
 	if (std::cin)
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
@@ -144,18 +162,12 @@ int	main(void)
 		if (!std::getline(std::cin, command))
 		{
 			if (std::cin.eof())
-				std::cout << std::endl
-							<< "EOF encountered, \
-					exiting..."
-							<< std::endl;
+				std::cout << std::endl << "EOF encountered, exiting..." << std::endl;
 			else
-				std::cout << std::endl
-							<< "Input error, \
-					exiting..."
-							<< std::endl;
+				std::cout << std::endl << "Input error, exiting..." << std::endl;
 			break ;
 		}
-		if (command == "ADD")
+		if (removeWhiteSpaces(command) == "ADD")
 			phoneBook.addContact();
 		else if (command == "SEARCH")
 			phoneBook.searchContact();
