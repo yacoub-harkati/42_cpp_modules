@@ -6,7 +6,7 @@
 /*   By: yaharkat <yaharkat@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 18:12:20 by yaharkat          #+#    #+#             */
-/*   Updated: 2024/07/07 12:23:19 by yaharkat         ###   ########.fr       */
+/*   Updated: 2024/07/09 15:57:46 by yaharkat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 std::string formatOutput(std::string str)
 {
-	int	len;
+	int len;
 
 	len = str.length();
 	if (len > 10)
@@ -33,12 +33,14 @@ std::string formatOutput(std::string str)
 PhoneBook::PhoneBook(void)
 {
 	contactIndex = 0;
+	replacedOldContact = false;
 }
 
 PhoneBook::PhoneBook(Contact contacts[8], int contactIndex)
 {
 	contacts = contacts;
 	contactIndex = contactIndex;
+	replacedOldContact = false;
 }
 
 void PhoneBook::addContact(void)
@@ -51,30 +53,30 @@ void PhoneBook::addContact(void)
 	std::cout << "Enter first name: ";
 	std::getline(std::cin, firstName);
 	if (std::cin.eof())
-		return ;
+		return;
 	std::cout << "Enter last name: ";
 	std::getline(std::cin, lastName);
 	if (std::cin.eof())
-		return ;
+		return;
 	std::cout << "Enter nickname: ";
 	if (std::cin.eof())
-		return ;
+		return;
 	std::getline(std::cin, nickName);
 	std::cout << "Enter phone number: ";
 	if (std::cin.eof())
-		return ;
+		return;
 	std::getline(std::cin, phoneNumber);
 	std::cout << "Enter darkest secret: ";
 	if (std::cin.eof())
-		return ;
+		return;
 	std::getline(std::cin, darkestSecret);
 	if (std::cin.eof())
-		return ;
+		return;
 	Contact contact(firstName, lastName, nickName, phoneNumber, darkestSecret);
 	if (contact.isEmpty())
 	{
 		std::cout << "Contact is empty, not adding!" << std::endl;
-		return ;
+		return;
 	}
 	if (contactIndex < 8)
 	{
@@ -85,6 +87,8 @@ void PhoneBook::addContact(void)
 	{
 		contactIndex = 0;
 		contacts[contactIndex] = contact;
+		contactIndex++;
+		replacedOldContact = true;
 	}
 	std::cout << "Contact added successfully!" << std::endl;
 }
@@ -115,11 +119,11 @@ int PhoneBook::length(void)
 	return (contactIndex);
 }
 
-
 void PhoneBook::searchContact(void)
 {
-	int	index;
-
+	int index;
+	std::string input;
+	
 	displayContacts();
 	std::cout << "Enter the index of the Contact you're searching for: ";
 	std::cin >> index;
@@ -128,21 +132,21 @@ void PhoneBook::searchContact(void)
 		std::cin.clear();
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::cout << "Input failed. Exiting search." << std::endl;
-		return ;
+		return;
 	}
 	if (index > 7 || index < 0)
 	{
 		std::cout << "Index out of Range!!" << std::endl;
 		if (std::cin)
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return ;
+		return;
 	}
-	 if (this->length() == 0 || index >= this->length())
+	if ((length() == 0 && !replacedOldContact) || (index >= length() && !replacedOldContact))
 	{
 		if (std::cin)
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		std::cout << "No contacts available!" << std::endl;
-		return ;
+		return;
 	}
 	else
 		displayOneContact(index);
@@ -150,7 +154,7 @@ void PhoneBook::searchContact(void)
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-int	main(void)
+int main(void)
 {
 	std::string command;
 	PhoneBook phoneBook;
@@ -162,17 +166,19 @@ int	main(void)
 		if (!std::getline(std::cin, command))
 		{
 			if (std::cin.eof())
-				std::cout << std::endl << "EOF encountered, exiting..." << std::endl;
+				std::cout << std::endl
+						  << "EOF encountered, exiting..." << std::endl;
 			else
-				std::cout << std::endl << "Input error, exiting..." << std::endl;
-			break ;
+				std::cout << std::endl
+						  << "Input error, exiting..." << std::endl;
+			break;
 		}
 		if (removeWhiteSpaces(command) == "ADD")
 			phoneBook.addContact();
 		else if (command == "SEARCH")
 			phoneBook.searchContact();
 		else if (command == "EXIT")
-			break ;
+			break;
 		else
 			std::cout << "Invalid command!" << std::endl;
 	}

@@ -5,6 +5,10 @@ SRC= PhoneBook.cpp Contact.cpp
 HEADERS= -I PhoneBook.hpp -I Contact.hpp
 OBJ= $(SRC:.cpp=.o)
 
+ifeq ($(DEBUG), 1)
+	CFLAGS += -g3 -fsanitize=address
+endif
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
